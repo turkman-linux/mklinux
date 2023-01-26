@@ -20,7 +20,7 @@ cat > isowork/boot/grub/grub.cfg <<EOF
 insmod all_video
 menuentry TurkMan {
     linux /linux boot=live quiet
-    initrd /initrd
+    initrd /initrd.img
 }
 EOF
 grub-mkrescue -o turkman.iso isowork
