@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 if [[ "$UID" != "0" ]] ; then
     echo "You must be root!"
     exit 31
