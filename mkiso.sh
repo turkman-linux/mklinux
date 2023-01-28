@@ -4,14 +4,17 @@ if [[ "$UID" != "0" ]] ; then
     echo "You must be root!"
     exit 31
 fi
-umash 022
+umask 022
 mkdir isowork/live -p
 mkdir isowork/boot/grub -p
 if ! which ympstrap >/dev/null ; then
     wget https://gitlab.com/turkman/devel/sources/ymp/-/raw/master/scripts/ympstrap -O /bin/ympstrap
     chmod +x /bin/ympstrap
 fi
-ympstrap rootfs live-boot linux openrc bash
+ympstrap rootfs live-boot linux openrc
+ln -s openrc-init rootfs/sbin/init
+ln -s agetty rootfs/etc/init.d/agetty.tty1
+chroot rootfs rc-update add agetty.tty1
 echo -e "31\n31\n" | chroot rootfs passwd
 echo "nameserver 1.1.1.1" > rootfs/etc/resolv.conf
 mksquashfs rootfs isowork/live/filesystem.squashfs -comp gzip -wildcards
