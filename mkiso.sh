@@ -12,8 +12,8 @@ if ! which ympstrap >/dev/null ; then
     chmod +x /bin/ympstrap
 fi
 ympstrap rootfs live-boot linux openrc
-ln -s openrc-init rootfs/sbin/init
-ln -s agetty rootfs/etc/init.d/agetty.tty1
+ln -s openrc-init rootfs/sbin/init || true
+ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
 chroot rootfs rc-update add agetty.tty1
 echo -e "31\n31\n" | chroot rootfs passwd
 echo "nameserver 1.1.1.1" > rootfs/etc/resolv.conf
