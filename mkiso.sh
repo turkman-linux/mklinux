@@ -17,11 +17,17 @@ ln -s agetty rootfs/etc/init.d/agetty.tty1
 chroot rootfs rc-update add agetty.tty1
 echo -e "31\n31\n" | chroot rootfs passwd
 echo "nameserver 1.1.1.1" > rootfs/etc/resolv.conf
+for dir in dev sys proc run tmp ; do
+    mount --bind /$dir rootfs/$dir
+done
 if [[ -f custom ]] ; then
     cp custom rootfs/tmp/custom
     chroot rootfs sh -e /tmp/custom
     rm rootfs/tmp/custom
 fi
+for dir in dev sys proc run tmp ; do
+    while umount -lf -R rootfs/$dir ; do : ; done
+done
 mksquashfs rootfs isowork/live/filesystem.squashfs -comp gzip -wildcards
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
