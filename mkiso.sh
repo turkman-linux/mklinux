@@ -22,7 +22,7 @@ for dir in dev sys proc run tmp ; do
 done
 if [[ -f custom ]] ; then
     cp custom rootfs/tmp/custom
-    chroot rootfs sh -e /tmp/custom
+    chroot rootfs bash -ex /tmp/custom
     rm rootfs/tmp/custom
 fi
 for dir in dev sys proc run tmp ; do
