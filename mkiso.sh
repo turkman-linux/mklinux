@@ -43,10 +43,6 @@ elif [[ -d custom ]] ; then
         rm rootfs/tmp/custom
     done
 fi
-# bind unmount
-for dir in dev sys proc run tmp ; do
-    while umount -lf -R rootfs/$dir ; do : ; done
-done
 # clean
 chroot rootfs ymp clean --allow-oem
 find rootfs/var/log -type f -exec rm -f {} \;
@@ -63,6 +59,10 @@ if [[ "FIRMWARE" != "" ]] ; then
     cd ../../..
     rm -rf rootfs/tmp/linux-firmware*
 fi
+# bind unmount
+for dir in dev sys proc run tmp ; do
+    while umount -lf -R rootfs/$dir ; do : ; done
+done
 # create squashfs
 mksquashfs rootfs isowork/live/filesystem.squashfs -comp gzip -wildcards
 # copy kernel and initramfs
