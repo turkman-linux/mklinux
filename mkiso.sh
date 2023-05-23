@@ -47,6 +47,9 @@ fi
 for dir in dev sys proc run tmp ; do
     while umount -lf -R rootfs/$dir ; do : ; done
 done
+# clean
+chroot rootfs ymp clean --allow-oem
+find rootfs/var/log -type f -exec rm -f {} \;
 # linux-firmware (optional)
 if [[ "FIRMWARE" != "" ]] ; then
     src_uri="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/refs/"
