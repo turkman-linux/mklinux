@@ -16,10 +16,10 @@ if ! which ympstrap >/dev/null ; then
 fi
 # create rootfs
 ympstrap rootfs live-boot linux openrc gnupg
-# add gpg key
-wget -O rootfs/tmp/ymp-index.yaml.asc ${REPO/\$uri/ymp-index.yaml.asc}
-chroot rootfs gpg --import /tmp/ymp-index.yaml.asc
-rm -f rootfs/tmp/ymp-index.yaml.asc
+# bind mount
+for dir in dev sys proc run tmp ; do
+    mount --bind /$dir rootfs/$dir
+done
 # openrc settings
 ln -s openrc-init rootfs/sbin/init || true
 ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
@@ -27,10 +27,10 @@ chroot rootfs rc-update add agetty.tty1
 # system configuration
 echo -e "31\n31\n" | chroot rootfs passwd
 echo "nameserver 1.1.1.1" > rootfs/etc/resolv.conf
-# bind mount
-for dir in dev sys proc run tmp ; do
-    mount --bind /$dir rootfs/$dir
-done
+# add gpg key
+wget -O rootfs/tmp/ymp-index.yaml.asc ${REPO/\$uri/ymp-index.yaml.asc}
+chroot rootfs gpg --import /tmp/ymp-index.yaml.asc
+rm -f rootfs/tmp/ymp-index.yaml.asc
 # customize
 if [[ -f custom ]] ; then
     cp custom rootfs/tmp/custom
