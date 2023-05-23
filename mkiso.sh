@@ -47,7 +47,7 @@ fi
 chroot rootfs ymp clean --allow-oem
 find rootfs/var/log -type f -exec rm -f {} \;
 # linux-firmware (optional)
-if [[ "FIRMWARE" != "" ]] ; then
+if [[ "$FIRMWARE" != "" ]] ; then
     src_uri="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/refs/"
     tarball=https://git.kernel.org/$(wget -O - ${src_uri} 2>/dev/null | sed "s/.tar.gz'.*/.tar.gz/g;s/.*'//g" | grep "^/pub" | sort -V | tail -n 1)
     version=$(echo $tarball | sed "s/.*-//g;s/\..*//g")
