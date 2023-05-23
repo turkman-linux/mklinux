@@ -17,7 +17,7 @@ fi
 # create rootfs
 ympstrap rootfs live-boot linux openrc gnupg
 # add gpg key
-wget -O rootfs/tmp/ymp-index.yaml.asc ${REPO/\$uri/ymp-index.asc}
+wget -O rootfs/tmp/ymp-index.yaml.asc ${REPO/\$uri/ymp-index.yamp.asc}
 chroot rootfs gpg --import /tmp/ymp-index.yaml.asc
 rm -f rootfs/tmp/ymp-index.yaml.asc
 # openrc settings
