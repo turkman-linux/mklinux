@@ -15,7 +15,7 @@ if ! which ympstrap >/dev/null ; then
     chmod +x /bin/ympstrap
 fi
 # create rootfs
-ympstrap rootfs live-boot linux openrc gnupg
+ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev
 # bind mount
 for dir in dev sys proc run tmp ; do
     mount --bind /$dir rootfs/$dir
