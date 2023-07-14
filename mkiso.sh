@@ -71,6 +71,8 @@ install rootfs/boot/initrd.img-* isowork/initrd.img
 # create grub config
 cat > isowork/boot/grub/grub.cfg <<EOF
 insmod all_video
+terminal_output console
+terminal_input console
 menuentry TurkMan {
     linux /linux boot=live quiet
     initrd /initrd.img
