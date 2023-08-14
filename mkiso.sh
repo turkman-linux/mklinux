@@ -28,9 +28,7 @@ chroot rootfs rc-update add agetty.tty1
 echo -e "31\n31\n" | chroot rootfs passwd
 echo "nameserver 1.1.1.1" > rootfs/etc/resolv.conf
 # add gpg key
-wget -O rootfs/tmp/ymp-index.yaml.asc ${REPO/\$uri/ymp-index.yaml.asc}
-chroot rootfs gpg --import /tmp/ymp-index.yaml.asc
-rm -f rootfs/tmp/ymp-index.yaml.asc
+ymp key --add ${REPO/\$uri/ymp-index.yaml.asc}
 # customize
 if [[ -f custom ]] ; then
     cp custom rootfs/tmp/custom
