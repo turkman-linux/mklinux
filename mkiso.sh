@@ -49,6 +49,7 @@ fi
 # clean
 chroot rootfs ymp clean --allow-oem
 find rootfs/var/log -type f -exec rm -f {} \;
+rm rootfs/etc/resolv.conf
 # linux-firmware (optional)
 if [[ "$FIRMWARE" != "" ]] ; then
     src_uri="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/refs/"
