@@ -23,10 +23,15 @@ done
 # openrc settings
 ln -s openrc-init rootfs/sbin/init || true
 ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
+ln -s agetty rootfs/etc/init.d/agetty.tty2 || true
+ln -s agetty rootfs/etc/init.d/agetty.tty3 || true
+ln -s agetty rootfs/etc/init.d/agetty.tty4 || true
+ln -s agetty rootfs/etc/init.d/agetty.tty5 || true
+ln -s agetty rootfs/etc/init.d/agetty.tty6 || true
 chroot rootfs rc-update add agetty.tty1
 # system configuration
-echo -e "31\n31\n" | chroot rootfs passwd
-echo "nameserver 1.1.1.1" > rootfs/etc/resolv.conf
+echo -e "live\nlive\n" | chroot rootfs passwd
+cat /etc/resolv.conf > rootfs/etc/resolv.conf
 # add gpg key
 chroot rootfs ymp key --add ${REPO/\$uri/ymp-index.yaml.asc} --allow-oem
 # customize
@@ -72,7 +77,7 @@ insmod all_video
 terminal_output console
 terminal_input console
 menuentry TurkMan {
-    linux /linux boot=live quiet
+    linux /linux boot=live quiet console=tty31
     initrd /initrd.img
 }
 EOF
