@@ -15,7 +15,7 @@ if ! which ympstrap >/dev/null ; then
     chmod +x /bin/ympstrap
 fi
 # create rootfs
-ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev
+ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg
 # bind mount
 for dir in dev sys proc run tmp ; do
     mount --bind /$dir rootfs/$dir
@@ -68,7 +68,7 @@ for dir in dev sys proc run tmp ; do
     while umount -lf -R rootfs/$dir ; do : ; done
 done
 # create squashfs
-mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 -comp gzip -Xcompression-level 9 -noappend -wildcards
+mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 -comp xz -Xcompression-level 9 -noappend -wildcards
 # copy kernel and initramfs
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
