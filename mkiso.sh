@@ -68,7 +68,7 @@ for dir in dev sys proc run tmp ; do
     while umount -lf -R rootfs/$dir ; do : ; done
 done
 # create squashfs
-mksquashfs rootfs isowork/live/filesystem.squashfs -comp gzip -wildcards
+mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 -comp gzip -Xcompression-level 9 -noappend -wildcards
 # copy kernel and initramfs
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
