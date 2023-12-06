@@ -29,6 +29,13 @@ ln -s agetty rootfs/etc/init.d/agetty.tty4 || true
 ln -s agetty rootfs/etc/init.d/agetty.tty5 || true
 ln -s agetty rootfs/etc/init.d/agetty.tty6 || true
 chroot rootfs rc-update add agetty.tty1
+chroot rootfs rc-update add agetty.tty2
+chroot rootfs rc-update add agetty.tty3
+chroot rootfs rc-update add agetty.tty4
+chroot rootfs rc-update add agetty.tty5
+chroot rootfs rc-update add agetty.tty6
+# enable live-config servive
+chroot rootfs rc-update add live-config
 # system configuration
 echo -e "live\nlive\n" | chroot rootfs passwd
 cat /etc/resolv.conf > rootfs/etc/resolv.conf
