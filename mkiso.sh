@@ -40,7 +40,7 @@ chroot rootfs rc-update add live-config
 echo -e "live\nlive\n" | chroot rootfs passwd
 cat /etc/resolv.conf > rootfs/etc/resolv.conf
 # add gpg key
-chroot rootfs ymp key --add ${REPO/\$uri/ymp-index.yaml.asc} --allow-oem
+chroot rootfs ymp key --add ${REPO/\$uri/ymp-index.yaml.asc} --name=main --allow-oem
 # customize
 if [[ -f custom ]] ; then
     cp custom rootfs/tmp/custom
