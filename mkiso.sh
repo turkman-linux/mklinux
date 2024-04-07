@@ -84,7 +84,7 @@ else
     xz=1
 fi
 # create squashfs
-mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 ${xz:+-comp xz} ${gzip:+-comp gzip} -Xdict-size 100% -noappend -wildcards
+mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 ${xz:+-comp xz -Xdict-size 100%} ${gzip:+-comp gzip}  -noappend -wildcards
 # copy kernel and initramfs
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
