@@ -15,7 +15,9 @@ if ! which ympstrap >/dev/null ; then
     chmod +x /bin/ympstrap
 fi
 # create rootfs
-ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg
+if [[ ! -f rootfs/etc/os-release ]] ; then
+    ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg
+fi
 # bind mount
 for dir in dev sys proc run tmp ; do
     mount --bind /$dir rootfs/$dir
@@ -74,8 +76,15 @@ fi
 for dir in dev sys proc run tmp ; do
     while umount -lf -R rootfs/$dir ; do : ; done
 done
+if [[ "$COMPRESS" == 'gzip' ]] ; then
+    gzip=1
+elif [[ "$COMPRESS" == 'none' ]] ; then
+    : Compress disabled
+else
+    xz=1
+fi
 # create squashfs
-mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 -comp xz -Xdict-size 100% -noappend -wildcards
+mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 ${xz:+-comp xz} ${gzip:+-comp gzip} -Xdict-size 100% -noappend -wildcards
 # copy kernel and initramfs
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
