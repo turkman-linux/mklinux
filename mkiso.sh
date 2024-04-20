@@ -23,12 +23,8 @@ for dir in dev sys proc run tmp ; do
     mount --bind /$dir rootfs/$dir
 done
 # openrc settings
-chroot rootfs rc-update add agetty.tty1
-#chroot rootfs rc-update add agetty.tty2
-#chroot rootfs rc-update add agetty.tty3
-#chroot rootfs rc-update add agetty.tty4
-#chroot rootfs rc-update add agetty.tty5
-#chroot rootfs rc-update add agetty.tty6
+ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
+chroot rootfs rc-update add agetty.tty1 || true
 # enable live-config service
 chroot rootfs rc-update add live-config
 # system configuration
