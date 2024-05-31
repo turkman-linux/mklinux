@@ -25,6 +25,7 @@ done
 # openrc settings
 ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
 chroot rootfs rc-update add agetty.tty1 || true
+ln -s openrc-init rootfs/sbin/init || true
 # enable live-config service
 chroot rootfs rc-update add live-config
 # system configuration
@@ -77,18 +78,20 @@ elif [[ "$COMPRESS" == 'none' ]] ; then
 else
     xz=1
 fi
-# create squashfs
-mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 ${xz:+-comp xz -Xdict-size 100%} ${gzip:+-comp gzip}  -noappend -wildcards
 # copy kernel and initramfs
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
+# remove initrd from rootfs
+rm -f rootfs/boot/initrd.img-*
+# create squashfs
+mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 ${xz:+-comp xz -Xdict-size 100%} ${gzip:+-comp gzip}  -noappend -wildcards
 # create grub config
 cat > isowork/boot/grub/grub.cfg <<EOF
 insmod all_video
 terminal_output console
 terminal_input console
 menuentry TurkMan {
-    linux /linux boot=live quiet console=tty31
+    linux /linux boot=live quiet
     initrd /initrd.img
 }
 EOF
