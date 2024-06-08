@@ -66,6 +66,10 @@ fi
 chmod 1777 rootfs/tmp
 chmod 700 rootfs/data/user/root
 chown root:root rootfs/data/user/root
+chmod 111 rootfs/bin
+chmod 111 rootfs/sbin
+chmod 111 rootfs/usr/bin
+chmod 111 rootfs/usr/sbin
 
 # bind unmount
 for dir in dev sys proc run tmp ; do
