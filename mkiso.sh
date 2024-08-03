@@ -16,7 +16,7 @@ if ! which ympstrap >/dev/null ; then
 fi
 # create rootfs
 if [[ ! -f rootfs/etc/os-release ]] ; then
-    ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg
+    ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg procps-ng
 fi
 # bind mount
 for dir in dev sys proc run tmp ; do
@@ -26,6 +26,9 @@ done
 ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
 chroot rootfs rc-update add agetty.tty1 || true
 ln -s openrc-init rootfs/sbin/init || true
+# sysctl settings
+rm -f rootfs//bin/sysctl
+chroot rootfs rc-update add sysctl sysinit
 # enable live-config service
 chroot rootfs rc-update add live-config
 # system configuration
