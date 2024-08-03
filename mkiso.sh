@@ -73,6 +73,7 @@ chmod 111 rootfs/bin
 chmod 111 rootfs/sbin
 chmod 111 rootfs/usr/bin
 chmod 111 rootfs/usr/sbin
+chmod 111 rootfs/usr/libexec
 
 # bind unmount
 for dir in dev sys proc run tmp ; do
