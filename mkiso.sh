@@ -61,7 +61,7 @@ if [[ "$FIRMWARE" != "" ]] ; then
     cd rootfs/tmp
     tar -xvf linux-firmware.tar.gz
     cd linux-firmware-$version
-    ./copy-firmware.sh ../../lib/firmware
+    make install dedup DESTDIR="$(realpath ../..)"
     cd ../../..
     rm -rf rootfs/tmp/linux-firmware*
 fi
