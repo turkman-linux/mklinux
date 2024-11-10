@@ -61,7 +61,7 @@ if [[ "$FIRMWARE" != "" ]] ; then
     cd rootfs/tmp
     tar -xvf linux-firmware.tar.gz
     cd linux-firmware-$version
-    ./copy-firmware.sh ../../lib/firmware --ignore-duplicates
+    ./copy-firmware.sh ../../lib/firmware
     cd ../../..
     rm -rf rootfs/tmp/linux-firmware*
 fi
