@@ -5,6 +5,9 @@ if [[ "$UID" != "0" ]] ; then
     exit 31
 fi
 umask 022
+if [[ -d isowork ]] ; then
+    rm -rf isowork
+fi
 mkdir isowork/live -p
 mkdir isowork/boot/grub -p
 if [[ "$REPO" == "" ]] ; then
