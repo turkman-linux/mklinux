@@ -19,7 +19,7 @@ if [[ ! -f rootfs/etc/os-release ]] ; then
     ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg procps-ng
 fi
 # bind mount
-for dir in dev sys proc run tmp ; do
+for dir in dev sys proc run ; do
     mount --bind /$dir rootfs/$dir
 done
 if [[ "${NO_CONFIGURE}" != "" ]] ; then
@@ -82,7 +82,7 @@ chmod 111 rootfs/usr/sbin
 chmod 111 rootfs/usr/libexec
 
 # bind unmount
-for dir in dev sys proc run tmp ; do
+for dir in dev sys proc run ; do
     while umount -lf -R rootfs/$dir ; do : ; done
 done
 if [[ "$COMPRESS" == 'gzip' ]] ; then
