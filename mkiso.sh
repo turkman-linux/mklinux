@@ -22,36 +22,38 @@ fi
 for dir in dev sys proc run tmp ; do
     mount --bind /$dir rootfs/$dir
 done
-# openrc settings
-ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
-chroot rootfs rc-update add agetty.tty1 || true
-ln -s openrc-init rootfs/sbin/init || true
-# sysctl settings
-rm -f rootfs/bin/sysctl || true
-chroot rootfs rc-update add sysctl sysinit
-# enable live-config service
-chroot rootfs rc-update add live-config
-# system configuration
-echo -e "live\nlive\n" | chroot rootfs passwd
-cat /etc/resolv.conf > rootfs/etc/resolv.conf
-# add gpg key
-chroot rootfs ymp key --add ${REPO/\$uri/ymp-index.yaml.asc} --name=main --allow-oem
-# customize
-if [[ -f custom ]] ; then
-    cp custom rootfs/tmp/custom
-    chroot rootfs bash -ex /tmp/custom
-    rm rootfs/tmp/custom
-elif [[ -d custom ]] ; then
-    for file in $(ls custom) ; do
-        cp custom/$file rootfs/tmp/custom
+if [[ "${NO_CONFIGURE}" != "" ]] ; then
+    # openrc settings
+    ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
+    chroot rootfs rc-update add agetty.tty1 || true
+    ln -s openrc-init rootfs/sbin/init || true
+    # sysctl settings
+    rm -f rootfs/bin/sysctl || true
+    chroot rootfs rc-update add sysctl sysinit
+   # enable live-config service
+    chroot rootfs rc-update add live-config
+    # system configuration
+    echo -e "live\nlive\n" | chroot rootfs passwd
+    cat /etc/resolv.conf > rootfs/etc/resolv.conf
+    # add gpg key
+    chroot rootfs ymp key --add ${REPO/\$uri/ymp-index.yaml.asc} --name=main --allow-oem
+    # customize
+    if [[ -f custom ]] ; then
+        cp custom rootfs/tmp/custom
         chroot rootfs bash -ex /tmp/custom
         rm rootfs/tmp/custom
-    done
+    elif [[ -d custom ]] ; then
+        for file in $(ls custom) ; do
+            cp custom/$file rootfs/tmp/custom
+            chroot rootfs bash -ex /tmp/custom
+            rm rootfs/tmp/custom
+        done
+    fi
+    # clean
+    chroot rootfs ymp clean --allow-oem
+    find rootfs/var/log -type f -exec rm -f {} \;
+    rm rootfs/etc/resolv.conf
 fi
-# clean
-chroot rootfs ymp clean --allow-oem
-find rootfs/var/log -type f -exec rm -f {} \;
-rm rootfs/etc/resolv.conf
 # linux-firmware (optional)
 if [[ "$FIRMWARE" != "" ]] ; then
     if [ ! -f /tmp/linux-firmware.tar.gz ] ; then
@@ -94,7 +96,7 @@ fi
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
 # remove initrd from rootfs
-rm -f rootfs/boot/initrd.img-*
+rm -f rootfs/boot/initrd.img-* || true
 # create squashfs
 mksquashfs rootfs isowork/live/filesystem.squashfs  -b 1048576 ${xz:+-comp xz -Xdict-size 100%} ${gzip:+-comp gzip}  -noappend -wildcards
 # create grub config
