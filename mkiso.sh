@@ -65,7 +65,7 @@ if [[ "$FIRMWARE" != "" ]] ; then
     cp -f /tmp/linux-firmware.tar.gz rootfs/tmp/linux-firmware.tar.gz
     cd rootfs/tmp
     tar -xvf linux-firmware.tar.gz
-    cd linux-firmware-$version
+    cd linux-firmware-*
     echo > check_whence.py
     make install dedup DESTDIR="$(realpath ../..)"
     cd ../../..
