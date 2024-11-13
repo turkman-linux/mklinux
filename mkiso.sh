@@ -27,7 +27,7 @@ ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
 chroot rootfs rc-update add agetty.tty1 || true
 ln -s openrc-init rootfs/sbin/init || true
 # sysctl settings
-rm -f rootfs//bin/sysctl
+rm -f rootfs/bin/sysctl || true
 chroot rootfs rc-update add sysctl sysinit
 # enable live-config service
 chroot rootfs rc-update add live-config
@@ -54,10 +54,13 @@ find rootfs/var/log -type f -exec rm -f {} \;
 rm rootfs/etc/resolv.conf
 # linux-firmware (optional)
 if [[ "$FIRMWARE" != "" ]] ; then
-    src_uri="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/refs/"
-    tarball=https://git.kernel.org/$(wget -O - ${src_uri} 2>/dev/null | sed "s/.tar.gz'.*/.tar.gz/g;s/.*'//g" | grep "^/pub" | sort -V | tail -n 1)
-    version=$(echo $tarball | sed "s/.*-//g;s/\..*//g")
-    wget $tarball -O rootfs/tmp/linux-firmware.tar.gz
+    if [ ! -f /tmp/linux-firmware.tar.gz ] ; then
+        src_uri="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/refs/"
+        tarball=https://git.kernel.org/$(wget -O - ${src_uri} 2>/dev/null | sed "s/.tar.gz'.*/.tar.gz/g;s/.*'//g" | grep "^/pub" | sort -V | tail -n 1)
+        version=$(echo $tarball | sed "s/.*-//g;s/\..*//g")
+        wget $tarball -O /tmp/linux-firmware.tar.gz
+    fi
+    cp -f /tmp/linux-firmware.tar.gz rootfs/tmp/linux-firmware.tar.gz
     cd rootfs/tmp
     tar -xvf linux-firmware.tar.gz
     cd linux-firmware-$version
