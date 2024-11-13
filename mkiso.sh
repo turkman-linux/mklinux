@@ -22,7 +22,7 @@ fi
 for dir in dev sys proc run ; do
     mount --bind /$dir rootfs/$dir
 done
-if [[ "${NO_CONFIGURE}" != "" ]] ; then
+if [[ "${CONFIGURE}" != "0" ]] ; then
     # openrc settings
     ln -s agetty rootfs/etc/init.d/agetty.tty1 || true
     chroot rootfs rc-update add agetty.tty1 || true
