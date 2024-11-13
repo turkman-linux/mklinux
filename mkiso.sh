@@ -96,6 +96,9 @@ else
     xz=1
 fi
 # copy kernel and initramfs
+for kernel in $(ls rootfs/lib/modules/) ; do
+    chroot rootfs update-initramfs -u -k "$kernel"
+done
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
 # remove initrd from rootfs
