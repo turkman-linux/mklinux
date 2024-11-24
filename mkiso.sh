@@ -19,7 +19,7 @@ if ! which ympstrap >/dev/null ; then
 fi
 # create rootfs
 if [[ ! -f rootfs/etc/os-release ]] ; then
-    ympstrap rootfs live-boot linux openrc gnupg kmod initramfs-tools eudev gnupg procps-ng
+    ympstrap rootfs live-boot linux openrc gnupg kmod mkinitrd eudev gnupg procps-ng
 fi
 # bind mount
 for dir in dev sys proc run ; do
@@ -97,7 +97,7 @@ else
 fi
 # copy kernel and initramfs
 for kernel in $(ls rootfs/lib/modules/) ; do
-    chroot rootfs update-initramfs -u -k "$kernel"
+    chroot rootfs mkinitrd -u -k "$kernel" -c /etc/initrd/config-live.sh
 done
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
