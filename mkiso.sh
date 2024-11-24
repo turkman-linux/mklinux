@@ -97,7 +97,7 @@ else
 fi
 # copy kernel and initramfs
 for kernel in $(ls rootfs/lib/modules/) ; do
-    chroot rootfs mkinitrd -u -k "$kernel" -c /etc/initrd/config-live.sh
+    chroot rootfs mkinitrd -u -z gzip -k "$kernel" -c /etc/initrd/config-live.sh
 done
 install rootfs/boot/vmlinuz-* isowork/linux
 install rootfs/boot/initrd.img-* isowork/initrd.img
