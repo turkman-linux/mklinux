@@ -116,4 +116,6 @@ menuentry TurkMan {
 }
 EOF
 # create iso image
-grub-mkrescue -o turkman.iso isowork
+grub-mkrescue -o turkman.iso isowork \
+    --fonts="" --locales=" --compress=gz \
+    --install-modules="linux normal fat all_video"
